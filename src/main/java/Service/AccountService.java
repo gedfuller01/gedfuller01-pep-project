@@ -33,4 +33,9 @@ public class AccountService {
         return null;
         
     }
+
+    public Account login(Account account){
+        Account loggedIn = accountDAO.login(account);
+        return loggedIn;
+    }
 }
