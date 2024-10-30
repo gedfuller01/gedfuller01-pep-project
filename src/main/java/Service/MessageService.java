@@ -24,6 +24,14 @@ public class MessageService {
         return messageDAO.getAllMessages();
     }
 
+    public Message getMessageById(int message_id){
+        Message message = messageDAO.getMessageById(message_id);
+        if (message == null){
+            return null;
+        }
+        return message;
+    }
+
     public Message createMessage(Message message){
         List<Account> accounts = accountDAO.getAllAccounts();
         if (message.getMessage_text() != ""){
