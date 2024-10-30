@@ -143,6 +143,12 @@ public class SocialMediaController {
         
         int message_id = Integer.parseInt(context.pathParam("message_id"));
         String message_text = context.body();
+        int index = message_text.indexOf(":");
+        message_text = message_text.substring(index);
+        index = message_text.indexOf("\"");
+        message_text = message_text.substring(index+1);
+        index = message_text.indexOf("\"");
+        message_text = message_text.substring(0,index);
         Message updatedMessage = messageService.updateMessage(message_id, message_text);
         if(updatedMessage != null){
             context.json(mapper.writeValueAsString(updatedMessage));
