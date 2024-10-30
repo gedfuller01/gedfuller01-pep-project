@@ -24,11 +24,21 @@ public class MessageService {
         return messageDAO.getAllMessages();
     }
 
+    public List<Message> getAllMessagesFromAccount(int account_id){
+        return messageDAO.getAllMessagesFromAccount(account_id);
+    }
+
     public Message getMessageById(int message_id){
         Message message = messageDAO.getMessageById(message_id);
         if (message == null){
             return null;
         }
+        return message;
+    }
+
+    public Message deleteMessageById(int message_id){
+        Message message = messageDAO.getMessageById(message_id);
+        messageDAO.deleteMessageById(message_id);
         return message;
     }
 
@@ -45,5 +55,14 @@ public class MessageService {
         }
         return null;
 
+    }
+
+    public Message updateMessage(int message_id, String message_text){
+        System.out.println("Here");
+        if(message_text.length() < 255 && message_text != ""){
+            return messageDAO.updateMessage(message_id, message_text);
+        }
+        return null;
+        
     }
 }

@@ -3,6 +3,8 @@ package Controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.h2.util.json.JSONObject;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -79,8 +81,12 @@ public class SocialMediaController {
         
     }
 
-    private void getAllMessagesByUser(Context context){
-        context.json("filler");
+    private void getAllMessagesByUser(Context context) throws JsonProcessingException{
+        ObjectMapper mapper = new ObjectMapper();
+        int user_id = Integer.parseInt(mapper.readValue(context.pathParam("account_id"), String.class));
+        List<Message> messages = messageService.getAllMessagesFromAccount(user_id);
+        context.json(mapper.writeValueAsString(messages));
+
     }
 
     private void userRegistration(Context context) throws JsonProcessingException{
@@ -120,12 +126,30 @@ public class SocialMediaController {
         }
     }
 
-    private void deleteMessage(Context context){
-        context.json("filler");
+    private void deleteMessage(Context context) throws JsonProcessingException{
+        ObjectMapper mapper = new ObjectMapper();
+        int message_id = Integer.parseInt(mapper.readValue(context.pathParam("message_id"), String.class));
+        Message message = messageService.deleteMessageById(message_id);
+        if (message == null){
+            context.json("");
+        }
+        else{
+            context.json(mapper.writeValueAsString(message));
+        }
     }
 
-    private void updateMessage(Context context){
-        context.json("filler");
+    private void updateMessage(Context context) throws JsonProcessingException{
+        ObjectMapper mapper = new ObjectMapper();
+        
+        int message_id = Integer.parseInt(context.pathParam("message_id"));
+        String message_text = context.body();
+        Message updatedMessage = messageService.updateMessage(message_id, message_text);
+        if(updatedMessage != null){
+            context.json(mapper.writeValueAsString(updatedMessage));
+        }
+        else{
+            context.status(400);
+        }
     }
 
 
