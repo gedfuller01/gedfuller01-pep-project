@@ -2,6 +2,7 @@ package Controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.h2.util.json.JSONObject;
 
@@ -140,15 +141,12 @@ public class SocialMediaController {
 
     private void updateMessage(Context context) throws JsonProcessingException{
         ObjectMapper mapper = new ObjectMapper();
-        
+        String body = context.body();
+        int index1 = body.indexOf(": \"");
+        int index2 = body.indexOf("\" }");
         int message_id = Integer.parseInt(context.pathParam("message_id"));
-        String message_text = context.body();
-        int index = message_text.indexOf(":");
-        message_text = message_text.substring(index);
-        index = message_text.indexOf("\"");
-        message_text = message_text.substring(index+1);
-        index = message_text.indexOf("\"");
-        message_text = message_text.substring(0,index);
+        String message_text = body.substring(index1+3, index2);
+        
         Message updatedMessage = messageService.updateMessage(message_id, message_text);
         if(updatedMessage != null){
             context.json(mapper.writeValueAsString(updatedMessage));

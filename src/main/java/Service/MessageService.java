@@ -60,7 +60,8 @@ public class MessageService {
     public Message updateMessage(int message_id, String message_text){
         System.out.println("Text:" + message_text + ".");
         if(message_text.length() < 255){
-            if(message_text != ""){
+            if(!message_text.equals("")){
+                System.out.println("Here");
                 return messageDAO.updateMessage(message_id, message_text);
             }
             
