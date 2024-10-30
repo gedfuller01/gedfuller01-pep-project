@@ -7,7 +7,10 @@ import io.javalin.Javalin;
 import io.javalin.http.Context;
 
 import Model.Account;
+import Model.Message;
+import Service.MessageService;
 import Service.AccountService;
+import DAO.MessageDAO;
 import DAO.AccountDAO;
 
 /**
@@ -17,9 +20,11 @@ import DAO.AccountDAO;
  */
 public class SocialMediaController {
     AccountService accountService;
+    MessageService messageService;
 
     public SocialMediaController(){
         accountService = new AccountService();
+        messageService = new MessageService();
     }
     /**
      * In order for the test cases to work, you will need to write the endpoints in the startAPI() method, as the test
@@ -89,8 +94,16 @@ public class SocialMediaController {
         
     }
 
-    private void createNewMessage(Context context){
-        context.json("filler");
+    private void createNewMessage(Context context) throws JsonProcessingException{
+        ObjectMapper mapper = new ObjectMapper();
+        Message message = mapper.readValue(context.body(), Message.class);
+        Message newMessage = messageService.createMessage(message);
+        if(newMessage != null){
+            context.json(mapper.writeValueAsString(newMessage));
+        }
+        else{
+            context.status(400);
+        }
     }
 
     private void deleteMessage(Context context){
