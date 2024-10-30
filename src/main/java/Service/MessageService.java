@@ -26,7 +26,7 @@ public class MessageService {
 
     public Message createMessage(Message message){
         List<Account> accounts = accountDAO.getAllAccounts();
-        if (message.getMessage_text() != null){
+        if (message.getMessage_text() != ""){
             if(message.getMessage_text().length() < 255){
                 for (int i = 0; i < accounts.size(); i++){
                     if(accounts.get(i).getAccount_id() == message.getPosted_by()){
